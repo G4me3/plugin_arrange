@@ -96,6 +96,11 @@ class AnnotationUploadDialog extends Component {
             <Typography variant="body1">No annotations stored yet.</Typography>
           ) : (
             <MenuList>
+              <div class="cp_iptxt">
+                <label class="ef">
+                  <input type="text" placeholder="Your name" />
+                </label>
+              </div>
               {exportLinks.map((dl) => (
                 <MenuItem
                   button
@@ -104,8 +109,6 @@ class AnnotationUploadDialog extends Component {
                   key={dl.canvasId}
                   aria-label={`Upload annotations to the server`}
                   onClick={() => uploadAnnotations(content)}
-                // href={dl.url}
-                // download={`${dl.id}.json`}
                 >
                   <ListItemIcon>
                     <Publish />
