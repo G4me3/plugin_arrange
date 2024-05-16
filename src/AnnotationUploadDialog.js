@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import PropTypes, { bool } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import { uploadAnnotations } from './AnnotationUploader';
+import { uploadAnnotations, isUsernameInputed } from './AnnotationUploader';
 
 /** */
 const styles = (theme) => ({
@@ -98,7 +98,7 @@ class AnnotationUploadDialog extends Component {
             <MenuList>
               <div class="cp_iptxt">
                 <label class="ef">
-                  <input type="text" placeholder="Your name" />
+                  <input id="username" type="text" placeholder="Your name" />
                 </label>
               </div>
               {exportLinks.map((dl) => (
@@ -108,7 +108,8 @@ class AnnotationUploadDialog extends Component {
                   component="a"
                   key={dl.canvasId}
                   aria-label={`Upload annotations to the server`}
-                  onClick={() => uploadAnnotations(content)}
+                  // onClick={() => uploadAnnotations(content)}
+                  onClick={() => isUsernameInputed()}
                 >
                   <ListItemIcon>
                     <Publish />

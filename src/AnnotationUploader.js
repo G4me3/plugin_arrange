@@ -34,3 +34,12 @@ export function uploadAnnotations(content) {
             window.alert(res);
         });
 }
+
+export function isUsernameInputed() {
+    const username = document.getElementById("username").value;
+    if (username == ""){
+        window.alert("input your name");
+    }else{
+        window.alert(username);
+    }
+}
