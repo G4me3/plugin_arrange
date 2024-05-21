@@ -1,4 +1,6 @@
-export function uploadAnnotations(content) {
+function uploadAnnotations(content, username) {
+    console.log(username);
+    setUsernameToLocalStorage(username);
     console.log(content);
 
     //ローカルストレージのアノテーションを実際のJSONに組み込めるように値を調整
@@ -14,7 +16,7 @@ export function uploadAnnotations(content) {
         const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}`;
 
         item.body.value = item.body.value.replace(/<p[^>]*>|<\/p>/g, "");
-        item.body.value = "<p>" + formattedDate + "  mori</p>" + item.body.value;
+        item.body.value = "<p>" + formattedDate + "  "+ username + "</p>" + item.body.value;
 
         //y座標がずれる不具合の修正
         const [, xStr, yStr, wStr, hStr] = item.target.selector[0].value.match(/xywh=(\d+),(\d+),(\d+),(\d+)/) || [];
@@ -35,11 +37,27 @@ export function uploadAnnotations(content) {
         });
 }
 
-export function isUsernameInputed() {
+export function isUsernameInputed(content) {
     const username = document.getElementById("username").value;
-    if (username == ""){
+    if (username == "") {
         window.alert("input your name");
-    }else{
-        window.alert(username);
+    } else {
+        uploadAnnotations(content, username);
     }
+}
+
+function getUsernameFromLocalstorage() {
+    const username = localStorage.getItem("username");
+    console.log(username);
+    return username;
+}
+
+function setUsernameToLocalStorage(username) {
+    localStorage.setItem("username", username);
+}
+
+export function setUsernameToTextBox() {
+    const username = getUsernameFromLocalstorage();
+    const usernameTextbox = document.getElementById("username");
+    usernameTextbox.value = username;
 }
