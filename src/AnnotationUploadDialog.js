@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import PropTypes, { bool } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import { setUsernameToTextBox, isUsernameInputed } from './AnnotationUploader';
+import { validateInputFields } from './AnnotationUploader';
 
 /** */
 const styles = (theme) => ({
@@ -87,39 +87,54 @@ class AnnotationUploadDialog extends Component {
         onClose={handleClose}
         onEscapeKeyDown={this.closeDialog}
         open={open}
+        className='annotation-upload-dialog'
       >
         <DialogTitle id="annotation-export-dialog-title" disableTypography>
-          <Typography variant="h2">Upload Annotations</Typography>
+          <Typography variant="h2">アノテーションのアップロード</Typography>
         </DialogTitle>
         <DialogContent>
           {exportLinks === undefined || exportLinks.length === 0 ? (
-            <Typography variant="body1">No annotations stored yet.</Typography>
+            <Typography variant="body1">アップロードするアノテーションがありません</Typography>
           ) : (
             <MenuList>
               <div class="cp_iptxt">
+                <label for ='username' className='label-write-area'>名前<div class="asterisk">* </div>：</label><br></br>
                 <label class="ef">
                   <input
                     id="username"
                     type="text"
-                    placeholder="Your name"
+                    placeholder="名前を入力してください"
                     defaultValue={localStorage.getItem("username")}
+                    name='username'
                   />
                 </label>
               </div>
+              <div class="cp_iptxt">
+                <label for ='delete-key' className='label-write-area'>削除キー<div class="asterisk">* </div>：</label><br></br>
+                <label class="ef">
+                  <input
+                    id="delete-key"
+                    type="text"
+                    placeholder="削除キーを入力してください"
+                    name='delete-key'
+                  />
+                </label>
+              </div>
+              <span className='vertical-line'></span>
               {exportLinks.map((dl) => (
                 <MenuItem
                   button
                   className={classes.listitem}
                   component="a"
                   key={dl.canvasId}
-                  aria-label={`Upload annotations to the server`}
-                  onClick={() => isUsernameInputed(content)}
+                  aria-label={`アノテーションをサーバーにアップロードする`}
+                  onClick={() => validateInputFields(content)}
                 >
                   <ListItemIcon>
                     <Publish />
                   </ListItemIcon>
                   <ListItemText>
-                    {`Upload annotations to the server`}
+                    {`アノテーションをサーバーにアップロードする`}
                   </ListItemText>
                 </MenuItem>
               ))}
