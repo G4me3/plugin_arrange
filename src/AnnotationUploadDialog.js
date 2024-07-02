@@ -117,10 +117,11 @@ class AnnotationUploadDialog extends Component {
                     type="text"
                     placeholder="削除キーを入力してください"
                     name='delete-key'
+                    defaultValue={localStorage.getItem("delete_key")}
                   />
                 </label>
               </div>
-              <span className='vertical-line'></span>
+              <span className='horizontal-line'></span>
               {exportLinks.map((dl) => (
                 <MenuItem
                   button
