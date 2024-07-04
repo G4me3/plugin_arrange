@@ -18,7 +18,7 @@ export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
                 <div class="cp_iptxt">
                     <label class="confirm-delkey-write-area" for="tag-write-area">削除キー<div class="asterisk">* </div>：</label><br>
                     <label class="ef">
-                    <input id="confirm-delkey-write-area" class="write-area" type="text" name="tag-write-area" value="${(localStorage.getItem("delete_key") != null) ? localStorage.getItem("delete_key") : "削除キーを入力してください"} " placeholder="削除キーを入力してください" />
+                    <input id="confirm-delkey-write-area" class="write-area" type="text" name="tag-write-area" value="${localStorage.getItem("delete_key") != null ? localStorage.getItem("delete_key") : ""}" placeholder="削除キーを入力してください" />
                     </label >
                 </div >
                 <button id="delete-annotation-btn" class="delete-annotation-btn2" type="button">削除</button>
