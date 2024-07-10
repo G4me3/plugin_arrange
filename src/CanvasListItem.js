@@ -10,7 +10,7 @@ var _ToggleButton = _interopRequireDefault(require("@material-ui/lab/ToggleButto
 var _ToggleButtonGroup = _interopRequireDefault(require("@material-ui/lab/ToggleButtonGroup"));
 var _flatten = _interopRequireDefault(require("lodash/flatten"));
 var _AnnotationActionsContext = _interopRequireDefault(require("./AnnotationActionsContext"));
-var { makeDeleteAnnotationDialog } = _interopRequireDefault(require("./AnnotationDeleteDialog"));
+var { makeDeleteAnnotationDialog, makeDeleteLocalAnnotationDialog } = _interopRequireDefault(require("./AnnotationDeleteDialog"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -42,20 +42,29 @@ var CanvasListItem = /*#__PURE__*/function (_Component) {
       receiveAnnotation = _this$context.receiveAnnotation,
       storageAdapter = _this$context.storageAdapter;
     var annotationid = this.props.annotationid; //これで各アノテーションを判別できそう
-    canvases.forEach(function (canvas) {
-      var adapter = storageAdapter(canvas.id);
-      adapter["delete"](annotationid).then(function (annoPage) {
-        receiveAnnotation(canvas.id, adapter.annotationPageId, annoPage);
-      });
-    });
     console.log(annotationid);
     console.log(this.context);
-    for (let item of this.context.canvases[0].__jsonld.annotations[0].items) {
-      if (item.id == annotationid && annotationid.startsWith("https://")) {
-        makeDeleteAnnotationDialog(annotationid, item.body.value);
-        console.log(item.body.value);
-      }
+    console.log(this.props);
+    var annotation_content = this.props.children[0][0].props.children[0].props.htmlString
+    console.log(annotation_content);
+    if (annotationid.startsWith("https://")) {
+      makeDeleteAnnotationDialog(annotationid, annotation_content);
+    } else {
+      makeDeleteLocalAnnotationDialog(canvases, storageAdapter, annotationid, receiveAnnotation, annotation_content);
+      // canvases.forEach(function (canvas) {
+      // var adapter = storageAdapter(canvas.id);
+      //   adapter["delete"](annotationid).then(function (annoPage) {
+      // receiveAnnotation(canvas.id, adapter.annotationPageId, annoPage);
+      // });
+      // });
     }
+
+    // for (let item of this.context.canvases[0].__jsonld.annotations[0].items) {
+    //   if (item.id == annotationid && annotationid.startsWith("https://")) {
+    //     makeDeleteAnnotationDialog(annotationid, item.body.value);
+    //     console.log(item.body.value);
+    //   }
+    // }
   }
 
   /** */;
