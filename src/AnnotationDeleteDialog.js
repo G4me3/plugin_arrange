@@ -1,16 +1,12 @@
 export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
     const body = $(".modal-area");
-    // const close = $(".modal-close6");
-    // const container = $(".modal-container6");
-    // const confirmAnnotation = $(".confirm-del-annotation");
-    // confirmAnnotation.text(annotation_content);
 
     body.html(`
     <div id="delete-dialog" class="modal-container6">
         <div class="modal-body6">
             <img class="modal-close6" src="./img/close-btn.png" alt="close-button">
             <div class="modal-content6">
-                <h3 class="modal5-title">アノテーションの削除</h3>
+                <h3 class="modal5-title">アノテーションの削除（サーバ上）</h3>
                 <div class="written-content-area">
                     <label for="written-annotation">アノテーション：</label><br>
                     <p class="written-annotation written-content confirm-del-annotation" name="written-annotation">${annotation_content}</p>
@@ -22,9 +18,9 @@ export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
                     </label >
                 </div >
                 <button id="delete-annotation-btn" class="delete-annotation-btn2" type="button">削除</button>
-           </div >
-        </div > 
-    </div >
+           </div>
+        </div> 
+    </div>
     `);
 
     //when click close btn
@@ -58,5 +54,50 @@ export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
                     container.addClass("not-show")
                 });
         }
+    })
+}
+
+export function makeDeleteLocalAnnotationDialog(canvases, storageAdapter, annotationid, receiveAnnotation, annotation_content) {
+    const body = $(".modal-area");
+
+    body.html(`
+    <div id="delete-dialog" class="modal-container6">
+        <div class="modal-body6 delete-local">
+            <img class="modal-close6" src="./img/close-btn.png" alt="close-button">
+            <div class="modal-content6">
+                <h3 class="modal5-title">アノテーションの削除（ローカル）</h3>
+                <div class="written-content-area">
+                    <label for="written-annotation">アノテーション：</label><br>
+                    <p class="written-annotation written-content confirm-del-annotation" name="written-annotation">${annotation_content}</p>
+                </div>
+                <button id="delete-annotation-btn" class="delete-annotation-btn2 delete-local-annotation-btn" type="button">削除</button>
+           </div>
+        </div> 
+    </div>
+    `);
+
+    //when click close btn
+    const close = $(".modal-close6");
+    close.on('click', function () {
+        body.empty();
+    });
+
+    //when click outside of modal-window
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.modal-body6').length) {
+        }
+    });
+
+    const deleteAnnotationBtn = $("#delete-annotation-btn");
+    deleteAnnotationBtn.on('click', function () {
+        canvases.forEach(function (canvas) {
+            var adapter = storageAdapter(canvas.id);
+            adapter["delete"](annotationid).then(function (annoPage) {
+                receiveAnnotation(canvas.id, adapter.annotationPageId, annoPage);
+            });
+        })
+
+        const container = $(".modal-container6");
+        container.addClass("not-show")
     })
 }
