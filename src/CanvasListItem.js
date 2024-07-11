@@ -51,23 +51,10 @@ var CanvasListItem = /*#__PURE__*/function (_Component) {
       makeDeleteAnnotationDialog(annotationid, annotation_content);
     } else {
       makeDeleteLocalAnnotationDialog(canvases, storageAdapter, annotationid, receiveAnnotation, annotation_content);
-      // canvases.forEach(function (canvas) {
-      // var adapter = storageAdapter(canvas.id);
-      //   adapter["delete"](annotationid).then(function (annoPage) {
-      // receiveAnnotation(canvas.id, adapter.annotationPageId, annoPage);
-      // });
-      // });
     }
-
-    // for (let item of this.context.canvases[0].__jsonld.annotations[0].items) {
-    //   if (item.id == annotationid && annotationid.startsWith("https://")) {
-    //     makeDeleteAnnotationDialog(annotationid, item.body.value);
-    //     console.log(item.body.value);
-    //   }
-    // }
   }
 
-  /** */;
+    /** */;
   _proto.handleEdit = function handleEdit() {
     var _this$context2 = this.context,
       addCompanionWindow = _this$context2.addCompanionWindow,
