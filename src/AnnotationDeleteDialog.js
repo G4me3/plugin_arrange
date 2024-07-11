@@ -29,12 +29,6 @@ export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
         body.empty();
     });
 
-    //when click outside of modal-window
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.modal-body6').length) {
-        }
-    });
-
     const deleteAnnotationBtn = $("#delete-annotation-btn");
     deleteAnnotationBtn.on('click', function () {
         const delete_key = document.getElementById("confirm-delkey-write-area").value;
@@ -50,8 +44,7 @@ export function makeDeleteAnnotationDialog(annotationid, annotation_content) {
                 .then(response => response.json())
                 .then(res => {
                     window.alert(res.split('\\n').join('\n'));
-                    const container = $(".modal-container6");
-                    container.addClass("not-show")
+                    location.reload();
                 });
         }
     })
@@ -80,12 +73,6 @@ export function makeDeleteLocalAnnotationDialog(canvases, storageAdapter, annota
     const close = $(".modal-close6");
     close.on('click', function () {
         body.empty();
-    });
-
-    //when click outside of modal-window
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.modal-body6').length) {
-        }
     });
 
     const deleteAnnotationBtn = $("#delete-annotation-btn");

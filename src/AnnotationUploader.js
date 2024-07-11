@@ -27,6 +27,7 @@ function uploadAnnotations(content, username, delete_key) {
         .then(response => response.json())
         .then(res => {
             window.alert(res.split('\\n').join('\n'));
+            location.reload();
         });
 }
 
