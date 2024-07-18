@@ -1,6 +1,7 @@
 import { validateInputFields } from "./AnnotationUploader";
 
-export async function makeAnnotationSelecetDialog(canvases, config) {
+export async function makeAnnotationSelecetDialog(canvases, config, e) {
+    e.stopPropagation();
     console.log(canvases);
     console.log(config);
     const store = config.annotation.adapter(canvases[0].id);
@@ -30,7 +31,7 @@ export async function makeAnnotationSelecetDialog(canvases, config) {
                                 <input id="delete-key-select" class="input-box" type="text" name="delkey-select" value="${localStorage.getItem("delete_key") != null ? localStorage.getItem("delete_key") : ""}" placeholder="削除キーを入力してください" />
                                 </label >
                             </div>
-                            <button id="post-annotation-btn" class="delete-annotation-btn2" type="button" onclick="">投稿</button>
+                            <button id="post-annotation-btn" class="delete-annotation-btn2" type="button">投稿</button>
                         </div>
                     </div>
                </div>
@@ -43,15 +44,39 @@ export async function makeAnnotationSelecetDialog(canvases, config) {
     for (let annotation of content["items"]) {
         annotation_area.innerHTML += `
                 <div class="annotation-block">
-                    <input type="checkbox"/>
-                    <p id="${annotation.id}">${annotation.body.value.replace(/<p[^>]*>|<\/p>/g, "")}</p>
+                    <label>
+                        <input type="checkbox" name="annotation" value="${annotation.id}">
+                        ${annotation.body.value.replace(/<p[^>]*>|<\/p>/g, "")}
+                    </label>
                 </div>
                 `;
+
     }
+
 
     //when click close btn
     const close = $(".modal-close6");
     close.on('click', function () {
         body.empty();
     });
+
+    const post_btn = $("#post-annotation-btn");
+    post_btn.on("click", function (e) {
+        filteringPostAnnotation(content, e);
+    });
+}
+
+function filteringPostAnnotation(content, e) {
+    const checkboxes = document.querySelectorAll("input[name='annotation']:checked");
+    if (checkboxes.length == 0) {
+        window.alert("アノテーションを選択してください");
+    } else {
+        const uncheckboxes = document.querySelectorAll("input[name='annotation']:not(:checked)");
+        const unselected_annotations_id = Array.from(uncheckboxes).map(uncheckbox => uncheckbox.value);
+        for (let annotationid of unselected_annotations_id) {
+            content.items = content.items.filter(contentitem => contentitem.id !== annotationid);
+        }
+        console.log(content);
+        validateInputFields(content);
+    }
 }
