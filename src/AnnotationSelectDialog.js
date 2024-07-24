@@ -1,9 +1,5 @@
 import { validateInputFields } from "./AnnotationUploader";
 
-let checkboxes = "";
-let uncheckboxes = "";
-let unselected_annotations_id = "";
-
 export async function makeAnnotationSelecetDialog(canvases, config, e) {
     e.stopPropagation();
     console.log(canvases);
@@ -14,7 +10,7 @@ export async function makeAnnotationSelecetDialog(canvases, config, e) {
     console.log(content);
     const body = $(".modal-area");
 
-    if (content == null) {
+    if (content == null || content["items"].length == 0) {
         body.html(`
         <div id="delete-dialog" class="modal-container6">
             <div class="modal-body4">
@@ -61,18 +57,19 @@ export async function makeAnnotationSelecetDialog(canvases, config, e) {
 
         const post_btn = $("#post-annotation-btn");
         post_btn.on("click", function () {
-            checkboxes = document.querySelectorAll("input[name='annotation']:checked");
+            let checkboxes = document.querySelectorAll("input[name='annotation']:checked");
             if (checkboxes.length == 0) {
                 window.alert("アノテーションを選択してください");
-                checkboxes = "";
             } else {
-                uncheckboxes = document.querySelectorAll("input[name='annotation']:not(:checked)");
-                unselected_annotations_id = Array.from(uncheckboxes).map(uncheckbox => uncheckbox.value);
+                let uncheckboxes = document.querySelectorAll("input[name='annotation']:not(:checked)");
+                let unselected_annotations_id = Array.from(uncheckboxes).map(uncheckbox => uncheckbox.value);
+                let copy_content = JSON.parse(JSON.stringify(content));
                 for (let annotationid of unselected_annotations_id) {
-                    content.items = content.items.filter(contentitem => contentitem.id !== annotationid);
+                    copy_content.items = copy_content.items.filter(contentitem => contentitem.id !== annotationid);
                 }
                 console.log(content);
-                makeUploadConfirmDialog(content);
+                console.log(copy_content);
+                makeUploadConfirmDialog(copy_content);
             }
         });
     }
@@ -85,7 +82,6 @@ export async function makeAnnotationSelecetDialog(canvases, config, e) {
 }
 
 function makeUploadConfirmDialog(content) {
-
     const upload_confirm_dialog = document.getElementById("upload-confirm-dialog");
     upload_confirm_dialog.innerHTML += `
     <div id="delete-dialog" class="modal-container6b">
@@ -129,9 +125,6 @@ function makeUploadConfirmDialog(content) {
     const close = $(".modal-close6b");
     close.on('click', function () {
         const upload_confirm_dialog = $("#upload-confirm-dialog");
-        checkboxes = "";
-        uncheckboxes = "";
-        unselected_annotations_id = "";
         upload_confirm_dialog.empty();
     });
 
