@@ -30,6 +30,10 @@ export async function makeAnnotationSelecetDialog(canvases, config, e) {
                 <div id="modal-content6"  class="modal-content6">
                     <h3 class="modal5-title">アノテーションの選択</h3>
                     <div class="content-area">
+                        <div class="check-option-area">
+                            <button class="all-check-btn check-option-btn">全てにチェックを入れる</button>
+                            <button class="release-check-btn check-option-btn">全てのチェックを外す</button>
+                        </div>
                         <div id="annotation-area" class="annotation-area"></div>
                         <div class="input-area">
                             <button id="post-annotation-btn" class="delete-annotation-btn2" type="button">投稿</button>
@@ -52,8 +56,23 @@ export async function makeAnnotationSelecetDialog(canvases, config, e) {
                     </label>
                 </div>
                 `;
-
         }
+
+        const all_check_btn = $(".all-check-btn");
+        all_check_btn.on("click",function(){
+            let checkboxes = document.querySelectorAll("input[name='annotation']");
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        })
+
+        const relese_check_btn = $(".release-check-btn");
+        relese_check_btn.on("click", function () {
+            let checkboxes = document.querySelectorAll("input[name='annotation']");
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        })
 
         const post_btn = $("#post-annotation-btn");
         post_btn.on("click", function () {
